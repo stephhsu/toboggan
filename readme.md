@@ -1,6 +1,7 @@
 # Getting Started for local development
 ## Install postgres
 
+<<<<<<< HEAD
 * Install 	[docker](https://docs.docker.com/desktop/mac/install/)
 
 * Make local directory to store your postgres data:
@@ -8,6 +9,14 @@
   * `mkdir -p $HOME/pgdata`
 
 * Run docker image with volume mount that will save the data to your local directory
+=======
+*Install 	[docker](https://docs.docker.com/desktop/mac/install/)
+
+*Make local directory to store your postgres data: 
+`mkdir -p $HOME/pgdata`
+
+*Run docker image with volume mount that will save the data to your local directory
+>>>>>>> 1c66bb0b96e1f39efb0d822f8782e3ffb5984b5f
 ```
 docker run \
   -d \
@@ -18,6 +27,7 @@ docker run \
   postgres
 ```
 
+<<<<<<< HEAD
 * TODO: Further database setup instructions
 
 ## Set up project
@@ -37,4 +47,8 @@ docker run \
 
 
 
+=======
+*(Optional) Install and run pgadmin4: `docker run --rm -p 5050:5050 thajeztah/pgadmin4`
+**You can go to [http://localhost:5050](http://localhost:5050) to manage your postgres with pgadmin
+>>>>>>> 1c66bb0b96e1f39efb0d822f8782e3ffb5984b5f
 
