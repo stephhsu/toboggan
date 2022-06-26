@@ -1,3 +1,4 @@
+const { json } = require("express");
 const storage = require("../storage/users.storage.js");
 
 const getUsers = async (req, res) => {
@@ -30,6 +31,7 @@ const createUser = async (req, res) => {
         .json({ message: "error checking for existing user" });
     }
 
+    // if no existing user has the email, create a new user
     try {
       const newUser = await storage.createUserInDB(email);
       console.log("new user created");
@@ -41,7 +43,19 @@ const createUser = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  const id = req.params.id;
+  try {
+    const user = await storage.deleteUserByID(id);
+    return res.status(200).json(user.rows);
+  } catch (err) {
+    console.log(err.stack);
+    return res.status(400).json({ message: "error while deleting user" });
+  }
+};
+
 module.exports = {
   getUsers,
   createUser,
+  deleteUser,
 };
