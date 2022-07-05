@@ -37,6 +37,18 @@ const postCollection = async (req, res) => {
   res.status(200).json({ message: "success post collection" });
 };
 
+const getCollection = async (req, res) => {
+  const col_id = req.params.id;
+  try {
+    const data = await storage.getCollectionData(col_id);
+    res.status(200).json(data.rows);
+  } catch (err) {
+    console.log(err.stack);
+    res.status(400).json({ message: "error getting data from collection" });
+  }
+};
+
 module.exports = {
   postCollection,
+  getCollection,
 };

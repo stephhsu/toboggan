@@ -15,6 +15,16 @@ const createSoilMoistureData = (data) => {
   return pool.query(text, values);
 };
 
+const getCollectionData = (id) => {
+  // query collection data from soil moisture table
+  // if more types of data and tables in future, query from each one
+  const values = [id];
+  const text = "SELECT * FROM soil_moisture WHERE collection_ID = $1";
+
+  return pool.query(text, values);
+};
+
 module.exports = {
   createSoilMoistureData,
+  getCollectionData,
 };
