@@ -3,10 +3,23 @@ const { generate } = require("short-uuid");
 const short = require("short-uuid");
 const storage = require("../storage/collections.storage.js");
 
+const getCollections = async (req, res) => {
+  try {
+    const collections = await storage.getCollectionIdAndDate();
+    res.status(200).json(collections.rows);
+  } catch (err) {
+    console.log(err.stack);
+    res.status(400).json({ message: "error getting collection ids from db" });
+  }
+};
+
 const postCollection = async (req, res) => {
   // keep track of each date and associated collection id
   let ids = {};
 
+  // TODO: We are assuming that everytime new data is being added, there are no duplicate dates
+  // Need to add functionality that checks for collection ids from existing dates as
+  // well (will be similar query as GET /collections)
   function generateCollectionID(day) {
     // if we already have a collection id generated for a day, return the id
     if (day in ids) {
@@ -55,7 +68,7 @@ const postCollection = async (req, res) => {
   res.status(200).json({ message: "success post collection" });
 };
 
-const getCollection = async (req, res) => {
+const getCollectionData = async (req, res) => {
   const col_id = req.params.id;
   try {
     const data = await storage.getCollectionData(col_id);
@@ -67,6 +80,7 @@ const getCollection = async (req, res) => {
 };
 
 module.exports = {
+  getCollections,
   postCollection,
-  getCollection,
+  getCollectionData,
 };
