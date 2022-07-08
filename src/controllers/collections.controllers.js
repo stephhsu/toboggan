@@ -3,9 +3,18 @@ const { generate } = require("short-uuid");
 const short = require("short-uuid");
 const storage = require("../storage/collections.storage.js");
 
+const DEFAULT_LIMIT_COLLECTIONS = 14;
+
 const getCollections = async (req, res) => {
+  // get the request's limit for how many collection ids to return
+  // TODO: Add pagination
+  let { limit } = req.query;
+  if (!limit) {
+    limit = DEFAULT_LIMIT_COLLECTIONS;
+  }
+
   try {
-    const collections = await storage.getCollectionIdAndDate();
+    const collections = await storage.getCollectionIdAndDate(limit);
     res.status(200).json(collections.rows);
   } catch (err) {
     console.log(err.stack);

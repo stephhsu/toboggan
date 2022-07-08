@@ -16,13 +16,14 @@ const createSoilMoistureData = (data) => {
   return pool.query(text, values);
 };
 
-const getCollectionIdAndDate = () => {
+const getCollectionIdAndDate = (lim) => {
+  const values = [lim];
   // query unique collection ids and select the one with greatest timestamp
   const text =
     "WITH collections AS (SELECT collection_ID, MAX(moisture_time) AS val_time FROM " +
     "soil_moisture GROUP BY collection_ID) SELECT collection_id, val_time FROM " +
-    "collections ORDER BY val_time DESC";
-  return pool.query(text);
+    "collections ORDER BY val_time DESC LIMIT ($1)";
+  return pool.query(text, values);
 };
 
 const getCollectionData = (id) => {
