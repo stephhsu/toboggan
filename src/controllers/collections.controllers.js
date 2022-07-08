@@ -1,10 +1,22 @@
 const { json } = require("express");
+const { generate } = require("short-uuid");
 const short = require("short-uuid");
 const storage = require("../storage/collections.storage.js");
 
 const postCollection = async (req, res) => {
-  // generate collection id
-  const col_id = "col_" + short.generate();
+  // keep track of each date and associated collection id
+  let ids = {};
+
+  function generateCollectionID(day) {
+    // if we already have a collection id generated for a day, return the id
+    if (day in ids) {
+      return ids[day];
+    } else {
+      const id = "col_" + short.generate();
+      ids[day] = id;
+      return id;
+    }
+  }
 
   const { data } = req.body;
 
@@ -15,6 +27,12 @@ const postCollection = async (req, res) => {
     // for every measured value of the sensor, send to db
     await Promise.all(
       s.sensor_data.map(async (val) => {
+        // convert unix timestamp to date object
+        // since rover will be deployed quite often, only need to compare days rather than full date format
+        const dateObject = new Date(val.timestamp * 1000);
+        const day = dateObject.getDate();
+        const col_id = generateCollectionID(day);
+
         // soilData is an object that holds the values to insert into db
         const soilData = {
           col_id,
