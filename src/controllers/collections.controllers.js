@@ -59,12 +59,55 @@ const getCollection = async (req, res) => {
   const col_id = req.params.id;
   try {
     const data = await storage.getCollectionData(col_id);
-    res.status(200).json(data.rows);
+
+    // get sensor, time, and value from query results
+    // create on object to hold time and value
+    let pairedData = [];
+    data.rows.map((i) => {
+      const paired = {
+        sensor: i.sensor,
+        data: {
+          time: i.moisture_time,
+          value: i.moisture_val,
+        },
+      };
+      pairedData.push(paired);
+    });
+
+    // format and sort collection data by sensor and timestamps
+    const formatted = formatAndSortCollection(pairedData);
+    res.status(200).json(formatted);
   } catch (err) {
     console.log(err.stack);
     res.status(400).json({ message: "error getting data from collection" });
   }
 };
+
+function formatAndSortCollection(data) {
+  // separate data by each sensor
+  let d = [];
+  data.map((item) => {
+    let existingIndex = d.findIndex((i) => i.sensor === item.sensor);
+    if (existingIndex === -1) {
+      // no object for the sensor yet
+      const newSensor = {
+        sensor: item.sensor,
+        data: [item.data],
+      };
+      d.push(newSensor);
+    } else {
+      // append sensor data to existing array of data
+      d[existingIndex].data.push(item.data);
+    }
+  });
+
+  // for each sensor, sort data by ascending timestamps
+  d.map((sensor) => {
+    sensor.data.sort((a, b) => a.time - b.time);
+  });
+
+  return d;
+}
 
 module.exports = {
   postCollection,
