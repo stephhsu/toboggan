@@ -11,7 +11,18 @@ const createSoilMoistureData = (data) => {
   ];
 
   const text =
-    "INSERT INTO soil_moisture(collection_ID, sensor, moisture_val, moisture_time) VALUES ($1, $2, $3, $4) RETURNING *";
+    "INSERT INTO soil_moisture(collection_ID, sensor, moisture_val, moisture_time) " +
+    "VALUES ($1, $2, $3, $4) RETURNING *";
+  return pool.query(text, values);
+};
+
+const getCollectionIdAndDate = (lim) => {
+  const values = [lim];
+  // query unique collection ids and select the one with greatest timestamp
+  const text =
+    "WITH collections AS (SELECT collection_ID, MAX(moisture_time) AS val_time FROM " +
+    "soil_moisture GROUP BY collection_ID) SELECT collection_id, val_time FROM " +
+    "collections ORDER BY val_time DESC LIMIT ($1)";
   return pool.query(text, values);
 };
 
@@ -26,5 +37,6 @@ const getCollectionData = (id) => {
 
 module.exports = {
   createSoilMoistureData,
+  getCollectionIdAndDate,
   getCollectionData,
 };
