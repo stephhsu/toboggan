@@ -1,3 +1,4 @@
 node_modules/
 .env.production
 .env.development
+toboggan-prod-1.pem
