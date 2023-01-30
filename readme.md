@@ -26,16 +26,15 @@ docker run \
 
 - Make sure you have node downloaded
 
+- Download nodemon
+
 - Clone the repository
 
   - `cd toboggan`
 
   - `npm install`
 
-  - `node app.js`
-
-- For a live-updating server, you can download nodemon and run
-  `nodemon app.js`
+  - `npm run dev`
 
 \*(Optional) Install and run pgadmin4: `docker run --rm -p 5050:5050 thajeztah/pgadmin4`
 \*\*You can go to [http://localhost:5050](http://localhost:5050) to manage your postgres with pgadmin
