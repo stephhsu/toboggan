@@ -1,9 +1,10 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const port = 4000;
-const userRoutes = require("./src/routes/users.routes.js");
-const collectionRoutes = require("./src/routes/collections.routes.js");
+const userRoutes = require('./src/routes/users.routes.js');
+const collectionRoutes = require('./src/routes/collections.routes.js');
+const roverRoutes = require('./src/routes/rover.routes.js');
 
 app.use(bodyParser.json());
 app.use(
@@ -13,15 +14,16 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Origin', '*');
   next();
 });
 
-app.use("/users", userRoutes.router);
-app.use("/collections", collectionRoutes.router);
+app.use('/users', userRoutes.router);
+app.use('/collections', collectionRoutes.router);
+app.use('/rover', roverRoutes);
 
-app.get("/", (req, res) => {
-  res.send("Hello World! this is a test");
+app.get('/', (req, res) => {
+  res.send('Hello World! this is a test');
 });
 
 app.listen(port, () => {
