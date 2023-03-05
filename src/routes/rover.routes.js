@@ -2,14 +2,11 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/rover.controllers.js');
 
-// GET /rover/commands
-router.get('/commands', controller.getCommand);
+// GET /rover/cycle-status
+router.get('/cycle-status', controller.getCycleStatus);
 
-// POST /rover/commands
-router.post('/commands', controller.postCommand);
-
-// POST /rover/commands/:id
-router.post('/commands/:id', controller.postCommandAsReceived);
+// POST /rover/cycle-times
+router.post('/cycle-times', controller.setCycleTimes);
 
 module.exports = {
   router,

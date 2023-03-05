@@ -12,12 +12,3 @@ CREATE TABLE soil_moisture (
   moisture_val INTEGER,
   moisture_time BIGINT
 );
-
-CREATE TYPE command AS ENUM ('start', 'stop');
-
-CREATE TABLE rover_commands (
-  ID SERIAL PRIMARY KEY,
-  command_type command,
-  command_received boolean NOT NULL DEFAULT false,
-  created timestamptz NOT NULL DEFAULT now(),
-)

@@ -1,49 +1,25 @@
 const { json } = require('express');
 const storage = require('../storage/rover.storage.js');
+const RoverCycle = require('../services/roverCycle.service.js');
 
-const postCommand = async (req, res) => {
-  const { command } = req.body;
-  if (command === undefined || command === null) {
-    return res.status(400).json({ message: 'must have command' });
-  } else {
-    try {
-      const newCommand = await storage.createCommandInDB();
-      console.log('New command created');
-      return res.status(200).json(newCommand.rows);
-    } catch (err) {
-      console.log(err.stack);
-      return res.status(400).json({ message: 'error creating new command' });
-    }
+let roverCycle = new RoverCycle(null);
+
+const getCycleStatus = (req, res) => {
+  const isStartRover = roverCycle.checkInterval();
+  if (isStartRover) {
+    return res.status(200).json({ start: true });
   }
+  return res.status(200).json({ start: false });
 };
 
-const getCommand = async (req, res) => {
-  try {
-    const lastCommand = await storage.getLatestPendingCommand();
-    return res.status(200).json(lastCommand.rows);
-  } catch (err) {
-    console.log(err.stack);
-    return res
-      .status(400)
-      .json({ message: 'error getting most recent command' });
-  }
-};
-
-const postCommandAsReceived = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const command = await storage.updateCommandReceived();
-    return res.status(200).json(command.rows);
-  } catch (err) {
-    console.log(err.stack);
-    return res
-      .status(400)
-      .json({ message: 'error while updating command as received' });
-  }
+const setCycleTimes = (req, res) => {
+  const { interval, delayStart } = req.body;
+  console.log('interval, delay: ', interval, delayStart);
+  roverCycle = new RoverCycle(interval, delayStart);
+  return res.status(200).json({ message: 'rover cycle set' });
 };
 
 module.exports = {
-  postCommand,
-  getCommand,
-  postCommandAsReceived,
+  getCycleStatus,
+  setCycleTimes,
 };

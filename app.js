@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 
 app.use('/users', userRoutes.router);
 app.use('/collections', collectionRoutes.router);
-app.use('/rover', roverRoutes);
+app.use('/rover', roverRoutes.router);
 
 app.get('/', (req, res) => {
   res.send('Hello World! this is a test');
