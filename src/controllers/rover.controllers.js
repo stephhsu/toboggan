@@ -9,7 +9,7 @@ const getCycleStatus = (req, res) => {
   if (isStartRover) {
     return res.status(200).json({ start: true });
   }
-  return res.status(200).json({ start: false });
+  return res.status(204).json({ start: false });
 };
 
 const setCycleTimes = (req, res) => {
