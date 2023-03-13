@@ -5,17 +5,16 @@ const RoverCycle = require('../services/roverCycle.service.js');
 let roverCycle = new RoverCycle(null);
 
 const getCycleStatus = (req, res) => {
-  const isStartRover = roverCycle.checkInterval();
-  if (isStartRover) {
+  if (roverCycle.checkInterval()) {
     return res.status(200).json({ start: true });
   }
-  return res.status(204).json({ start: false });
+  console.log('return false');
+  return res.status(204).json();
 };
 
 const setCycleTimes = (req, res) => {
-  const { interval, delayStart } = req.body;
-  console.log('interval, delay: ', interval, delayStart);
-  roverCycle = new RoverCycle(interval, delayStart);
+  const { interval } = req.body;
+  roverCycle = new RoverCycle(interval);
   return res.status(200).json({ message: 'rover cycle set' });
 };
 

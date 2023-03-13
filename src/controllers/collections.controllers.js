@@ -1,7 +1,7 @@
-const { json } = require("express");
-const { generate } = require("short-uuid");
-const short = require("short-uuid");
-const storage = require("../storage/collections.storage.js");
+const { json } = require('express');
+const { generate } = require('short-uuid');
+const short = require('short-uuid');
+const storage = require('../storage/collections.storage.js');
 
 const DEFAULT_LIMIT_COLLECTIONS = 14;
 
@@ -18,7 +18,7 @@ const getCollections = async (req, res) => {
     res.status(200).json(collections.rows);
   } catch (err) {
     console.log(err.stack);
-    res.status(400).json({ message: "error getting collection ids from db" });
+    res.status(400).json({ message: 'error getting collection ids from db' });
   }
 };
 
@@ -34,7 +34,7 @@ const postCollection = async (req, res) => {
     if (day in ids) {
       return ids[day];
     } else {
-      const id = "col_" + short.generate();
+      const id = 'col_' + short.generate();
       ids[day] = id;
       return id;
     }
@@ -49,6 +49,7 @@ const postCollection = async (req, res) => {
     // for every measured value of the sensor, send to db
     await Promise.all(
       s.sensor_data.map(async (val) => {
+        console.log('adding val');
         // convert unix timestamp to date object
         // since rover will be deployed quite often, only need to compare days rather than full date format
         const dateObject = new Date(val.timestamp * 1000);
@@ -69,12 +70,12 @@ const postCollection = async (req, res) => {
           console.log(err.stack);
           return res
             .status(400)
-            .json({ message: "error posting collection data" });
+            .json({ message: 'error posting collection data' });
         }
       })
     );
   });
-  res.status(200).json({ message: "success post collection" });
+  res.status(200).json({ message: 'success post collection' });
 };
 
 const getCollectionData = async (req, res) => {
@@ -101,7 +102,7 @@ const getCollectionData = async (req, res) => {
     res.status(200).json(formatted);
   } catch (err) {
     console.log(err.stack);
-    res.status(400).json({ message: "error getting data from collection" });
+    res.status(400).json({ message: 'error getting data from collection' });
   }
 };
 
