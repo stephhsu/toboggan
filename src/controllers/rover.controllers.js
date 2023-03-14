@@ -2,13 +2,15 @@ const { json } = require('express');
 const storage = require('../storage/rover.storage.js');
 const RoverCycle = require('../services/roverCycle.service.js');
 
-let roverCycle = new RoverCycle(null);
+let roverCycle = undefined;
 
 const getCycleStatus = (req, res) => {
-  if (roverCycle.checkInterval()) {
-    return res.status(200).json({ start: true });
+  if (roverCycle !== undefined) {
+    if (roverCycle.checkInterval()) {
+      return res.status(200).json({ start: true });
+    }
   }
-  console.log('return false');
+
   return res.status(204).json();
 };
 
